@@ -4,7 +4,21 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            BoardGame game = new();
+
+            //game.AddGame();
+            //game.AddGame();
+
+
+            //game.WriteFile();
+
+            //game.Show();
+
+            //game.ReadFile();
+
+            game.Delete();
+
+            Console.ReadKey();
         }
     }
 }

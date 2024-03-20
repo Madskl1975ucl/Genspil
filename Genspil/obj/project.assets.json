@@ -8,19 +8,24 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\ftmakl\\.nuget\\packages\\": {}
+    "C:\\Users\\Haage\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ftmakl\\Desktop\\Datamatiker Online\\Teknologi - Programmering\\Projekter\\Genspil\\Genspil\\Genspil.csproj",
+      "projectUniqueName": "C:\\Users\\Haage\\source\\repos\\School\\TeamAssignments\\Genspil\\Genspil\\Genspil.csproj",
       "projectName": "Genspil",
-      "projectPath": "C:\\Users\\ftmakl\\Desktop\\Datamatiker Online\\Teknologi - Programmering\\Projekter\\Genspil\\Genspil\\Genspil.csproj",
-      "packagesPath": "C:\\Users\\ftmakl\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ftmakl\\Desktop\\Datamatiker Online\\Teknologi - Programmering\\Projekter\\Genspil\\Genspil\\obj\\",
+      "projectPath": "C:\\Users\\Haage\\source\\repos\\School\\TeamAssignments\\Genspil\\Genspil\\Genspil.csproj",
+      "packagesPath": "C:\\Users\\Haage\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Haage\\source\\repos\\School\\TeamAssignments\\Genspil\\Genspil\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\ftmakl\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Haage\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
