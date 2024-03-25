@@ -10,18 +10,18 @@ namespace Genspil
     public class GameItem
     {
 
-        private int _id { get; set; }
-        private string _name { get; set; }
-        private string _numberOfPlayers { get; set; }
-        //private string _language;
-        //private string _category;
-        //private string _condition;
-        //private double _price;
+        internal int _id;
+        internal string _name;
+        internal string _numberOfPlayers;
+        //internal string _language;
+        //internal string _category;
+        //internal string _condition;
+        //internal double _price;
 
 
         public override string ToString()
         {
-            return $"Navn: {_name}, Antal spillere: {_numberOfPlayers}";
+            return $"{_name},{_numberOfPlayers};";
         }
 
 
