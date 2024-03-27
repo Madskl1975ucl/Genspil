@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -13,16 +15,17 @@ namespace Genspil
     // Principper
     // Brug List<GameItem> frem for List<string>
     // Konverter List<GameItem> til List<string> & omvendt (fjerner string override & string.split & .join)
-    // Properties for at få adgang til GameItem.Name 
+    // Properties for at få adgang til GameItem. osv.
     // gameItems.txt = ren kommasepareret fil - udskrivning af data klares med $ stringinterpolation
 
-    //todo:0 Færdigør fields i GameItem
-    //todo:1 Konverter List<GameItem> til List<string> & omvendt (2 hjælpemetoder??)
-    //todo:2 Lav properties på GameItem fields
-    //todo:3 Lav ID metode
+
+    //todo:1 Exception handling + brugerinput
+   
     //todo:4 Lav Søgning (på et GameItem field) + kombination af fields
     //todo:5 Lav Opdatering
-    //todo:6 Lav Sortering efter navn & genre
+    //todo:6 Lav Sortering efter navn & genre 
+    //todo:7 DateTime created / DateTime updated - virker måske?
+    //todo:8 Forspørgsler håndteres i en anden klasse end GameItem
 
 
     public class BoardGameList
@@ -37,18 +40,65 @@ namespace Genspil
         // create-metoden (crud), der opretter et nyt spil
         public void AddGame()
         {
-            var name = string.Empty;
-            var numberOfPlayers = string.Empty;
+            int id = AddGameId();
+
+            string title;
+            string subtitle;
+            string minNumberOfPlayers;
+            string maxNumberOfPlayers;
+            string language;
+            string category;
+            string condition;
+            double price;
+            int stock;
 
             Console.WriteLine("Opret spil:");
 
             Console.Write("Skriv navn: ");
-            name = Console.ReadLine().ToLower();
+            title = Console.ReadLine().ToLower();
 
-            Console.Write("Skriv antal spillere: ");
-            numberOfPlayers = Console.ReadLine();
+            Console.Write("Tilføj evt. en undertitel eller tryk enter: ");
+            subtitle = Console.ReadLine().ToLower();
 
-            _gameItems.Add(new GameItem(name, numberOfPlayers));
+            Console.Write("Skriv minimum antal spillere: ");
+            minNumberOfPlayers = Console.ReadLine();
+
+            Console.Write("Skriv maksimum antal spillere: ");
+            maxNumberOfPlayers = Console.ReadLine();
+
+            Console.Write("Skriv spillets sprog: ");
+            language = Console.ReadLine().ToLower();
+
+            Console.Write("Skriv spillets kategori: ");
+            category = Console.ReadLine().ToLower();
+
+            Console.Write("Skriv spillets stand (1 - 10): ");
+            condition = Console.ReadLine().ToLower();
+
+            Console.Write("Skriv spillets pris: ");
+            price = double.Parse(Console.ReadLine());
+
+            Console.Write("Skriv antal: ");
+            stock = int.Parse(Console.ReadLine());
+
+            _gameItems.Add(new GameItem(id, title, subtitle, minNumberOfPlayers, maxNumberOfPlayers, language, category, condition, price, stock));
+        }
+
+         // pseudo til AddGameId.
+         // Læs den sidste gameItems' id.
+         // id = sidste gameItems id.
+        public int AddGameId()
+        {
+            ReadFile();
+            
+            int id;
+            
+            string[] idLine = _lines.Last().Split(',');
+
+            id = Convert.ToInt32(idLine[0]);            
+            id++;
+
+            return id;
         }
 
 
@@ -61,7 +111,7 @@ namespace Genspil
             {
                 // This text is always added, making the file longer over time
                 // if it is not deleted.
-                string appendText = $"{item.Name},{item.NumberOfPlayers}" + Environment.NewLine;
+                string appendText = $"{item.Id},{item.Title},{item.Subtitle},{item.MinNumberOfPlayers},{item.MaxNumberOfPlayers},{item.Language},{item.Category},{item.Condition},{item.Price},{item.Stock}" + Environment.NewLine;
                 File.AppendAllText(_path, appendText);
             }
         }
@@ -75,7 +125,7 @@ namespace Genspil
 
             foreach (GameItem item in _gameItems)
             {
-                string overwriteText = $"{item.Name},{item.NumberOfPlayers}" + Environment.NewLine;
+                string overwriteText = $"{item.Id},{item.Title},{item.Subtitle},{item.MinNumberOfPlayers},{item.MaxNumberOfPlayers},{item.Language},{item.Category},{item.Condition},{item.Price},{item.Stock}" + Environment.NewLine;
                 File.AppendAllText(_path, overwriteText);
             }
         }
@@ -92,7 +142,7 @@ namespace Genspil
 
 
         //Show metoder (brug ShowGameItems)
-        
+
         //public void Show()
         //{
         //    // Open the file to read from.            
@@ -104,20 +154,16 @@ namespace Genspil
             ReadFile();
             ConvertListStringToListGameItem();
 
-
-            Console.WriteLine("{0,-15} {1,-10}", "Navn", "Spillere");
-            Console.WriteLine("-----------------------------------");
-
             // Print each element in _gameItems             
             foreach (GameItem item in _gameItems)
             {
-                Console.WriteLine("{0,-15} {1,-10}", item.Name, item.NumberOfPlayers);
+                Console.WriteLine($"{item.Id}, {item.Title}, {item.Subtitle}, {item.MinNumberOfPlayers} - {item.MaxNumberOfPlayers}, {item.Language}, {item.Category}, {item.Condition}, {item.Price}, {item.Stock}");
                 //Console.WriteLine($"Navn: {item.Name}, Antal spillere: {item.NumberOfPlayers}");
             }
 
             _gameItems.Clear();
 
-        }      
+        }
         //public void ShowLines()
         //{
         //    // Print each element in _lines           
@@ -181,7 +227,6 @@ namespace Genspil
         {
             int inputUpdate;
 
-      
             ReadFile();
 
             Console.Write("Skriv nummeret på det spil, du vil opdatere: ");
@@ -227,7 +272,12 @@ namespace Genspil
             _gameItems = _lines.Select(item =>
             {
                 var parts = item.Split(',');
-                return new GameItem(parts[0], parts[1]);
+
+                int id = Convert.ToInt32(parts[0]);
+                double price = Convert.ToDouble(parts[8]);
+                int stock = Convert.ToInt32(parts[9]);
+
+                return new GameItem(id, parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7], price, stock);
             }
             ).ToList();
         }
@@ -238,7 +288,7 @@ namespace Genspil
         public void ConvertListGameItemToListString()
         {
             _lines.Clear();
-            _lines = _gameItems.Select(item => item.Name + "," + item.NumberOfPlayers).ToList();
+            _lines = _gameItems.Select(item => item.Title + "," + item.Subtitle + "," + item.MinNumberOfPlayers + item.MaxNumberOfPlayers + "," + item.Language + "," + item.Category + "," + item.Condition + "," + item.Price + "," + item.Stock).ToList();
         }
 
 
@@ -247,18 +297,11 @@ namespace Genspil
 
 
 
-
-
-
-
-
-
-
-        // read-metoden (crud), der henter et brætspil til læsning
-        public BoardGameList GetGameById(int id)
-        {
-            throw new NotImplementedException();
-        }
+        //// read-metoden (crud), der henter et brætspil til læsning
+        //public BoardGameList GetGameById(int id)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         //// update-metode (crud), der opdaterer oplysninger for et gemt spil i persistance-filen 
         //public BoardGameList UpdateGame(int id)

@@ -53,7 +53,7 @@ namespace Genspil
                     case 4:
                         game.ShowGameItems();
                         game.Delete();
-                        //game.WriteToFile();
+                        //game.WriteFile();
                         break;
                     case 5:
                         game.ShowGameItems();
